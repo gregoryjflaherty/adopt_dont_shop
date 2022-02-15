@@ -1,14 +1,30 @@
-<h1> ADMIN PAGE </h1>
+<h1>
+  ADMIN PAGE
+</h1>
 <h3>All Shelters</h3>
-<div id = "shelters">
+<div id="shelters">
   <% @shelters.each_with_index do |shelter, index| %>
     <div class="shelter">
       <h5><%= shelter.name %></h5>
-      <p>Foster program: <%= shelter.foster_program %></p>
-      <p>City: <%= shelter.city %></p>
-      <p>Rank: <%= shelter.rank %></p>
-      <p>Created at: <%= shelter.created_at %></p>
-      <p>Updated at: <%= shelter.updated_at %></p>
+      <p>Foster program:
+        <%= shelter.foster_program %></p>
+      <p>City:
+        <%= shelter.city %></p>
+      <p>Rank:
+        <%= shelter.rank %></p>
+      <p>Created at:
+        <%= shelter.created_at %></p>
+      <p>Updated at:
+        <%= shelter.updated_at %></p>
+    </div>
+  <% end %>
+</div>
+
+<div id="pending_apps">
+  <h3>Shelter's with Pending Applications</h3>
+  <% @pending_shelters.each do |shelter| %>
+    <div class="shelter">
+      <h5><%= shelter.name %></h5>
     </div>
   <% end %>
 </div>
