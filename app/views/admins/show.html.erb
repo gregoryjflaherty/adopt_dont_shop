@@ -1,12 +1,13 @@
+
 <h3><%= @applicant.name %></h3>
-<% @applicant.pets.each do |pet| %>
-  <h5><%= pet.name %><h5>
-  <% if pet.status == "t" %>
-    <%= "#{pet.name} has been approved" %>
-  <% elsif pet.status == "f" %>
-    <%= "#{pet.name} has been rejected" %>
+<% @applications.each do |app| %>
+  <h5><%= app.pet.name %><h5>
+  <% if app.status == "Approved" %>
+    <%= "#{app.pet.name} has been approved" %>
+  <% elsif app.status == "Rejected" %>
+    <%= "#{app.pet.name} has been rejected" %>
   <% else %>
-    <%= button_to "Accept #{pet.name}", "/admin/applications/#{@applicant.id}?pet_id=#{pet.id}&decision=accept", method: :patch %>
-    <%= button_to "Reject #{pet.name}", "/admin/applications/#{@applicant.id}?pet_id=#{pet.id}&decision=reject", method: :patch %>
+    <%= button_to "Accept #{app.pet.name}", "/admin/applications/#{@applicant.id}?pet_id=#{app.pet.id}&decision=accept", method: :patch %>
+    <%= button_to "Reject #{app.pet.name}", "/admin/applications/#{@applicant.id}?pet_id=#{app.pet.id}&decision=reject", method: :patch %>
   <% end %>
 <% end %>

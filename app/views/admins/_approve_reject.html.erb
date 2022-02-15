@@ -1,0 +1,5 @@
+<% if @application.approved = true %>
+  <%= "#{pet.name} has been approved" %>
+<% elsif @application.approved== "f"  %>
+  <%= "#{pet.name} has been rejected" %>
+<% end %>
