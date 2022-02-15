@@ -12,4 +12,16 @@ class Applicant < ApplicationRecord
   before_create do
     self.status = "In Progress"
   end
+
+  def see_status
+    if pet_applicants.where(status: "Approved").count == pet_applicants.count
+      self.status == "Approved"
+      return "Approved"
+    elsif pet_applicants.where(status: "Rejected").count >= 1
+      self.status == "Rejected"
+      return "Rejected"
+    else
+      self.status == "Pending"
+    end
+  end
 end

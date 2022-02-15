@@ -17,7 +17,7 @@ RSpec.describe 'admin show page' do
     it 'For every pet, I see a button to approve the application for that specific pet' do
       visit "/admin/applications/#{@greg.id}"
       expect(current_path).to eq("/admin/applications/#{@greg.id}")
-      save_and_open_page
+
       expect(page).to have_button("Accept #{@jax.name}")
       expect(page).to have_button("Accept #{@boss.name}")
       expect(page).to have_button("Accept #{@luke.name}")
@@ -29,7 +29,6 @@ RSpec.describe 'admin show page' do
 
       click_on "Accept #{@jax.name}"
       expect(current_path).to eq("/admin/applications/#{@greg.id}")
-      save_and_open_page
       expect(page).to have_content("#{@jax.name} has been approved")
     end
   end
@@ -68,6 +67,30 @@ RSpec.describe 'admin show page' do
       click_on "Accept #{@luke.name}"
       expect(current_path).to eq("/admin/applications/#{@katie.id}")
       expect(page).to have_content("#{@luke.name} has been approved")
+    end
+  end
+
+  describe 'admin decisions change applicant status' do
+    it 'if I accept all pets, applicant status is "Accepted"' do
+      visit "/admin/applications/#{@greg.id}"
+      expect(current_path).to eq("/admin/applications/#{@greg.id}")
+
+      click_on "Accept #{@jax.name}"
+      click_on "Accept #{@boss.name}"
+      click_on "Accept #{@luke.name}"
+      expect(current_path).to eq("/admin/applications/#{@greg.id}")
+      expect(page).to have_content("Application status: Approved")
+    end
+
+    it 'if I reject one or more pets, applicant status is "Rejected"' do
+      visit "/admin/applications/#{@greg.id}"
+      expect(current_path).to eq("/admin/applications/#{@greg.id}")
+
+      click_on "Accept #{@jax.name}"
+      click_on "Accept #{@boss.name}"
+      click_on "Reject #{@luke.name}"
+      expect(current_path).to eq("/admin/applications/#{@greg.id}")
+      expect(page).to have_content("Application status: Rejected")
     end
   end
 end

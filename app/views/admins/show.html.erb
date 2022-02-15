@@ -1,5 +1,7 @@
 
 <h3><%= @applicant.name %></h3>
+<h3><%= "Application status: #{@applicant.see_status}" %></h3>
+
 <% @applications.each do |app| %>
   <h5><%= app.pet.name %><h5>
   <% if app.status == "Approved" %>
