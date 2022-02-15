@@ -93,4 +93,23 @@ RSpec.describe 'admin show page' do
       expect(page).to have_content("Application status: Rejected")
     end
   end
+
+  describe 'accepting pets changes pets status in pet show page' do
+    it 'accepts pets on application, then checks pet show page is not adoptable' do 
+      visit "/admin/applications/#{@greg.id}"
+      expect(current_path).to eq("/admin/applications/#{@greg.id}")
+
+      click_on "Accept #{@jax.name}"
+      click_on "Accept #{@boss.name}"
+
+      visit "/pets/#{@jax.id}"
+      save_and_open_page
+      expect(page).to have_content("Adoptable: false")
+      expect(page).to_not have_content("Adoptable: true")
+
+      visit "/pets/#{@boss.id}"
+      expect(page).to have_content("Adoptable: false")
+      expect(page).to_not have_content("Adoptable: true")
+    end
+  end
 end
