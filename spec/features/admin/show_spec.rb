@@ -19,11 +19,39 @@ RSpec.describe 'admin show page' do
       visit "/admin/applications/#{@greg.id}"
       expect(current_path).to eq("/admin/applications/#{@greg.id}")
 
-      within '#pets' do
-        expect(page.all('.pet')[0]).to have_button("Approve #{@jax.name}")
-        expect(page.all('.pet')[1]).to have_button("Approve #{@boss.name}")
-        expect(page.all('.pet')[2]).to have_buttton("Approve #{@luke.name}")
-      end
+      expect(page).to have_button("Accept #{@jax.name}")
+      expect(page).to have_button("Accept #{@boss.name}")
+      expect(page).to have_button("Accept #{@luke.name}")
+    end
+
+    it 'when I click on approve, I see indicator that pet is approved' do
+      visit "/admin/applications/#{@greg.id}"
+      expect(current_path).to eq("/admin/applications/#{@greg.id}")
+
+      click_on "Accept #{@jax.name}"
+      expect(current_path).to eq("/admin/applications/#{@greg.id}")
+      expect(page).to have_content("#{@jax.name} has been approved")
+    end
+  end
+
+  describe 'rejects a specific pet' do
+    it 'For every pet, I see a button to approve the application for that specific pet' do
+      visit "/admin/applications/#{@greg.id}"
+      expect(current_path).to eq("/admin/applications/#{@greg.id}")
+
+      expect(page).to have_button("Reject #{@jax.name}")
+      expect(page).to have_button("Reject #{@boss.name}")
+      expect(page).to have_button("Reject #{@luke.name}")
+    end
+
+    it 'when I click on reject, I see indicator that pet is rejected' do
+      visit "/admin/applications/#{@greg.id}"
+      expect(current_path).to eq("/admin/applications/#{@greg.id}")
+
+      click_on "Reject #{@luke.name}"
+      expect(current_path).to eq("/admin/applications/#{@greg.id}")
+      expect(page).to have_content("#{@luke.name} has been rejected")
+      save_and_open_page
     end
   end
 end

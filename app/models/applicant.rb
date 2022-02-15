@@ -12,5 +12,4 @@ class Applicant < ApplicationRecord
   before_create do
     self.status = "In Progress"
   end
-
 end
