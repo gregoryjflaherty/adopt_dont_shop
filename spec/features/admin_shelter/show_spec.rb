@@ -4,8 +4,8 @@ RSpec.describe 'admin index' do
   before(:each) do
     @cherry_creek = Shelter.create(name: 'Cherry Creek shelter', city: 'Denver, CO', foster_program: true, rank: 1)
     @boss = @cherry_creek.pets.create(name: "Boss", age: 2, breed: 'German Shepard', adoptable: true)
-    @luke = @cherry_creek.pets.create(name: "Luke", age: 1, breed: 'Huskie', adoptable: true)
-    @milka = @cherry_creek.pets.create(name: "Milka", age: 2, breed: 'English Retriever', adoptable: true)
+    @luke = @cherry_creek.pets.create(name: "Luke", age: 1, breed: 'Huskie', adoptable: false, status: "Approved")
+    @milka = @cherry_creek.pets.create(name: "Milka", age: 2, breed: 'English Retriever', adoptable: false, status: "Approved")
     @ducky = @cherry_creek.pets.create(name: "Ducky", age: 5, breed: 'Unkown', adoptable: true)
   end
 
@@ -25,14 +25,20 @@ RSpec.describe 'admin index' do
       expect(page).to have_content("Statistics")
     end
 
-    it 'has a statistic for avg age of all adotpable pets' do
+    it 'has a statistic for avg age of all adoptable pets' do
       visit "/admin/shelters/#{@cherry_creek.id}"
       expect(page).to have_content("Average age of adoptable pets: #{@cherry_creek.avg_age_available_pets}")
     end
 
-    it 'has a statistic for count of all adotpable pets' do
+    it 'has a statistic for count of all adoptable pets' do
       visit "/admin/shelters/#{@cherry_creek.id}"
       expect(page).to have_content("Number of adoptable pets: #{@cherry_creek.adoptable_pet_count}")
+    end
+
+    it 'has a statistic for count of all adopted pets' do
+      visit "/admin/shelters/#{@cherry_creek.id}"
+      save_and_open_page
+      expect(page).to have_content("Number of adopted pets: #{@cherry_creek.adopted_pet_count}")
     end
   end
 end

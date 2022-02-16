@@ -44,6 +44,10 @@ class Shelter < ApplicationRecord
     pets.where(adoptable: true).count
   end
 
+  def adopted_pet_count
+    pets.where(adoptable: false).where(status: "Approved").count
+  end
+
   def alphabetical_pets
     adoptable_pets.order(name: :asc)
   end
