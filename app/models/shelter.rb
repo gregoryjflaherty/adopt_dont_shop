@@ -24,10 +24,6 @@ class Shelter < ApplicationRecord
       .order("pets_count DESC")
   end
 
-  def self.pending_apps
-    joins(:pets).where('pets.status = ?', 'Pending').uniq
-  end
-
   def self.pending_alphabetical_shelters
     joins(:pets).where('pets.status = ?', 'Pending').order(name: :asc).uniq
   end
@@ -58,5 +54,9 @@ class Shelter < ApplicationRecord
 
   def avg_age_available_pets
     pets.where(adoptable: true).average(:age).to_f
+  end
+
+  def pending_apps
+    pets.where("status = ?", "Pending").to_a
   end
 end

@@ -9,7 +9,8 @@ class AdminsController < ApplicationController
     @pet = Pet.find(params[:pet_id])
     if params[:decision] == 'accept'
       @application = PetApplicant.find_and_accept(params[:id], params[:pet_id]).first
-      @application.pet.update!(adoptable: false, status: "approved")
+      @application.pet.update!(adoptable: false, status: "Approved")
+      @applicant.update(status: "Approved")
       redirect_to "/admin/applications/#{@applicant.id}"
     elsif params[:decision] == 'reject'
       @application = PetApplicant.find_and_reject(params[:id], params[:pet_id]).first

@@ -1,12 +1,21 @@
 require 'rails_helper'
 
-RSpec.describe 'admin index' do
+RSpec.describe 'admin show' do
   before(:each) do
     @cherry_creek = Shelter.create(name: 'Cherry Creek shelter', city: 'Denver, CO', foster_program: true, rank: 1)
-    @boss = @cherry_creek.pets.create(name: "Boss", age: 2, breed: 'German Shepard', adoptable: true)
+
+    @boss = @cherry_creek.pets.create(name: "Boss", age: 2, breed: 'German Shepard', adoptable: true, status: "Pending")
     @luke = @cherry_creek.pets.create(name: "Luke", age: 1, breed: 'Huskie', adoptable: false, status: "Approved")
     @milka = @cherry_creek.pets.create(name: "Milka", age: 2, breed: 'English Retriever', adoptable: false, status: "Approved")
-    @ducky = @cherry_creek.pets.create(name: "Ducky", age: 5, breed: 'Unkown', adoptable: true)
+    @ducky = @cherry_creek.pets.create(name: "Ducky", age: 5, breed: 'Unkown', adoptable: true, status: "Pending")
+
+    @greg = Applicant.create(name: 'Greg Flaherty', street_address: '123 MyStreet St.', city: "Dallas", state: "TX", zipcode: '12345', description: "Love dogs", status: "Pending")
+    @laura = Applicant.create(name: 'Laura Guerra', street_address: '123 MyStreet St.', city: "Dallas", state: "TX", zipcode: '12345', description: "Love dogs", status: "Pending")
+
+    PetApplicant.create(pet_id: @luke.id, applicant_id: @greg.id, approved: false)
+    PetApplicant.create(pet_id: @boss.id, applicant_id: @greg.id, approved: false)
+    PetApplicant.create(pet_id: @milka.id, applicant_id: @laura.id, approved: false)
+    PetApplicant.create(pet_id: @ducky.id, applicant_id: @laura.id, approved: false)
   end
 
   describe "has show page with attributes" do
@@ -37,7 +46,7 @@ RSpec.describe 'admin index' do
 
     it 'has a statistic for count of all adopted pets' do
       visit "/admin/shelters/#{@cherry_creek.id}"
-      save_and_open_page
+
       expect(page).to have_content("Number of adopted pets: #{@cherry_creek.adopted_pet_count}")
     end
   end
