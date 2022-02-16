@@ -120,7 +120,6 @@ RSpec.describe 'admin show page' do
       visit "/admin/applications/#{@katie.id}"
       expect(current_path).to eq("/admin/applications/#{@katie.id}")
       within '#pet_apps' do
-        save_and_open_page
         expect(page.all('.pet')[0]).to have_content("#{@luke.name} has been approved on another application")
         expect(page.all('.pet')[0]).to have_button("Reject #{@luke.name}")
         expect(page.all('.pet')[0]).to_not have_button("Accept #{@luke.name}")

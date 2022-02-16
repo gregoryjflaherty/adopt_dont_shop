@@ -5,6 +5,10 @@ class Shelter < ApplicationRecord
 
   has_many :pets, dependent: :destroy
 
+  def self.get_all_with_address
+    find_by_sql("SELECT name, city FROM shelters")
+  end
+
   def self.alphabetical_shelters
     find_by_sql("SELECT * FROM shelters ORDER BY name")
   end
