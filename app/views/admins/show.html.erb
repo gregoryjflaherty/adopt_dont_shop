@@ -2,14 +2,21 @@
 <h3><%= @applicant.name %></h3>
 <h3><%= "Application status: #{@applicant.see_status}" %></h3>
 
-<% @applications.each do |app| %>
+<div id = "pet_apps">
+<% @applications.each_with_index do |app, index| %>
+  <div class="pet">
   <h5><%= app.pet.name %><h5>
-  <% if app.status == "Approved" %>
-    <%= "#{app.pet.name} has been approved" %>
+  <% if app.status == "Pending" && app.pet.adoptable == false %>
+    <p><%= "#{app.pet.name} has been approved on another application" %></p>
+    <%= button_to "Reject #{app.pet.name}", "/admin/applications/#{@applicant.id}?pet_id=#{app.pet.id}&decision=reject", method: :patch %>
+  <% elsif app.status == "Approved" %>
+    <p><%= "#{app.pet.name} has been approved on your application" %></p>
   <% elsif app.status == "Rejected" %>
-    <%= "#{app.pet.name} has been rejected" %>
+    <p><%= "#{app.pet.name} has been rejected" %></p>
   <% else %>
     <%= button_to "Accept #{app.pet.name}", "/admin/applications/#{@applicant.id}?pet_id=#{app.pet.id}&decision=accept", method: :patch %>
     <%= button_to "Reject #{app.pet.name}", "/admin/applications/#{@applicant.id}?pet_id=#{app.pet.id}&decision=reject", method: :patch %>
   <% end %>
+  </div>
 <% end %>
+</div>

@@ -22,6 +22,7 @@ class Applicant < ApplicationRecord
       return "Rejected"
     else
       self.status == "Pending"
+      return "Pending"
     end
   end
 end
