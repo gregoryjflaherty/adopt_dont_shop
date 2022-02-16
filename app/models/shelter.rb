@@ -28,6 +28,10 @@ class Shelter < ApplicationRecord
     joins(:pets).where('pets.status = ?', 'Pending').uniq
   end
 
+  def self.pending_alphabetical_shelters
+    joins(:pets).where('pets.status = ?', 'Pending').order(name: :asc).uniq
+  end
+
   def pet_count
     pets.count
   end
