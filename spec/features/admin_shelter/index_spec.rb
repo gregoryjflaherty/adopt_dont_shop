@@ -26,7 +26,7 @@ RSpec.describe 'admin index' do
 
   describe 'shows pending applications' do
     it 'shows each shelter with pending application' do
-    visit "/admin/shelters"
+      visit "/admin/shelters"
       within ('#pending_apps') do
         expect(page).to have_content("#{@cherry_creek.name}")
         expect(page).to have_content("#{@denver.name}")
