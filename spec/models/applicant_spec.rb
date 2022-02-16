@@ -10,13 +10,4 @@ RSpec.describe Applicant, type: :model do
     it { should validate_presence_of(:name) }
     it { should validate_uniqueness_of(:name)}
   end
-
-  before(:each) do
-
-
-  end
-
-  describe ("#gets all pending apps by shelter") do
-
-  end
 end
