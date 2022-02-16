@@ -9,8 +9,8 @@ class Shelter < ApplicationRecord
     find_by_sql("SELECT id, name, city FROM shelters WHERE id = #{params}")
   end
 
-  def self.alphabetical_shelters
-    find_by_sql("SELECT * FROM shelters ORDER BY name")
+  def self.reverse_alphabetical_shelters
+    order(name: :desc)
   end
 
   def self.order_by_recently_created

@@ -14,13 +14,13 @@ RSpec.describe 'admin index' do
     PetApplicant.create(pet_id: @luke.id, applicant_id: @greg.id, approved: false)
   end
 
-  it 'lists all shelters alphabetically' do
+  it 'lists all shelters alphabetically- in reverse' do
     visit "/admin/shelters"
 
     within ('#shelters') do
-      expect(page.all('.shelter')[0]).to have_content("#{@aurora.name}")
+      expect(page.all('.shelter')[0]).to have_content("#{@denver.name}")
       expect(page.all('.shelter')[1]).to have_content("#{@cherry_creek.name}")
-      expect(page.all('.shelter')[2]).to have_content("#{@denver.name}")
+      expect(page.all('.shelter')[2]).to have_content("#{@aurora.name}")
     end
   end
 
@@ -38,6 +38,7 @@ RSpec.describe 'admin index' do
     it 'shows each shelter with pending application in alphabetical order' do
     visit "/admin/shelters"
       within ('#pending_apps') do
+
         expect(page.all('.shelter')[0]).to have_content("#{@aurora.name}")
         expect(page.all('.shelter')[1]).to have_content("#{@cherry_creek.name}")
         expect(page.all('.shelter')[2]).to have_content("#{@denver.name}")
@@ -50,7 +51,7 @@ RSpec.describe 'admin index' do
       visit "/admin/shelters"
 
       within ('#shelters') do
-        expect(page.all('.shelter')[0]).to have_link("#{@aurora.name}")
+        expect(page.all('.shelter')[2]).to have_link("#{@aurora.name}")
         click_on "#{@aurora.name}"
         expect(current_path).to eq("/admin/shelters/#{@aurora.id}")
       end
@@ -64,7 +65,7 @@ RSpec.describe 'admin index' do
 
       visit "/admin/shelters"
       within ('#shelters') do
-        expect(page.all('.shelter')[2]).to have_link("#{@denver.name}")
+        expect(page.all('.shelter')[0]).to have_link("#{@denver.name}")
         click_on "#{@denver.name}"
         expect(current_path).to eq("/admin/shelters/#{@denver.id}")
       end
