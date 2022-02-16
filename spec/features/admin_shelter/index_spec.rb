@@ -44,4 +44,30 @@ RSpec.describe 'admin index' do
       end
     end
   end
+
+  describe 'every shelter name has a link' do
+    it 'every name is a link to the admin show page' do
+      visit "/admin/shelters"
+
+      within ('#shelters') do
+        expect(page.all('.shelter')[0]).to have_link("#{@aurora.name}")
+        click_on "#{@aurora.name}"
+        expect(current_path).to eq("/admin/shelters/#{@aurora.id}")
+      end
+
+      visit "/admin/shelters"
+      within ('#shelters') do
+        expect(page.all('.shelter')[1]).to have_link("#{@cherry_creek.name}")
+        click_on "#{@cherry_creek.name}"
+        expect(current_path).to eq("/admin/shelters/#{@cherry_creek.id}")
+      end
+
+      visit "/admin/shelters"
+      within ('#shelters') do
+        expect(page.all('.shelter')[2]).to have_link("#{@denver.name}")
+        click_on "#{@denver.name}"
+        expect(current_path).to eq("/admin/shelters/#{@denver.id}")
+      end
+    end
+  end
 end
