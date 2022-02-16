@@ -5,8 +5,8 @@ class Shelter < ApplicationRecord
 
   has_many :pets, dependent: :destroy
 
-  def self.get_all_with_address
-    find_by_sql("SELECT name, city FROM shelters")
+  def self.get_with_address(params)
+    find_by_sql("SELECT id, name, city FROM shelters WHERE id = #{params}")
   end
 
   def self.alphabetical_shelters
@@ -40,11 +40,19 @@ class Shelter < ApplicationRecord
     pets.where(adoptable: true)
   end
 
+  def adoptable_pet_count
+    pets.where(adoptable: true).count
+  end
+
   def alphabetical_pets
     adoptable_pets.order(name: :asc)
   end
 
   def shelter_pets_filtered_by_age(age_filter)
     adoptable_pets.where('age >= ?', age_filter)
+  end
+
+  def avg_age_available_pets
+    pets.where(adoptable: true).average(:age).to_f
   end
 end
