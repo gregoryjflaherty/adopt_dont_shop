@@ -3,7 +3,7 @@ class PetApplicant < ApplicationRecord
   belongs_to :applicant
 
   before_create do
-    self.status = "In Progress"
+    self.status = "Pending"
   end
 
   def self.find_and_accept(applicant, pet)

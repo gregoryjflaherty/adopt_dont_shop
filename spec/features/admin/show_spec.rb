@@ -7,10 +7,12 @@ RSpec.describe 'admin show page' do
     @jax = @cherry_creek.pets.create(name: "Jax", age: 1, breed: 'Golden Retriever', adoptable: true, status: 'Pending')
     @boss = @cherry_creek.pets.create(name: "Boss", age: 2, breed: 'German Shepard', adoptable: true, status: 'Pending')
     @luke = @denver.pets.create(name: "Luke", age: 1, breed: 'Huskie', adoptable: true, status: 'Pending')
+    @katie = Applicant.create(name: 'Katie Sanger', street_address: '123 MyStreet St.', city: "Dallas", state: "TX", zipcode: '12345', description: "Love dogs", status: "Pending")
     @greg = Applicant.create(name: 'Greg Flaherty', street_address: '123 MyStreet St.', city: "Dallas", state: "TX", zipcode: '12345', description: "Love dogs", status: "Pending")
     PetApplicant.create(pet_id: @jax.id, applicant_id: @greg.id, approved: false, status: "Pending")
     PetApplicant.create(pet_id: @boss.id, applicant_id: @greg.id, approved: false, status: "Pending")
     PetApplicant.create(pet_id: @luke.id, applicant_id: @greg.id, approved: false, status: "Pending")
+    PetApplicant.create(pet_id: @luke.id, applicant_id: @katie.id, approved: false)
   end
 
   describe 'approve a specific pet' do
@@ -29,7 +31,7 @@ RSpec.describe 'admin show page' do
 
       click_on "Accept #{@jax.name}"
       expect(current_path).to eq("/admin/applications/#{@greg.id}")
-      expect(page).to have_content("#{@jax.name} has been approved")
+      expect(page).to have_content("#{@jax.name} has been approved on your application")
     end
   end
 
@@ -52,21 +54,16 @@ RSpec.describe 'admin show page' do
       expect(page).to have_content("#{@luke.name} has been rejected")
     end
 
-    it 'accepting a pet on app doesnt accept it on another' do
-      @katie = Applicant.create(name: 'Katie Sanger', street_address: '123 MyStreet St.', city: "Dallas", state: "TX", zipcode: '12345', description: "Love dogs", status: "Pending")
-      PetApplicant.create(pet_id: @luke.id, applicant_id: @katie.id, approved: false)
-
+    it 'accepting a pet on one application doesnt accept it on another' do
       visit "/admin/applications/#{@greg.id}"
       expect(current_path).to eq("/admin/applications/#{@greg.id}")
       click_on "Accept #{@luke.name}"
       expect(current_path).to eq("/admin/applications/#{@greg.id}")
-      expect(page).to have_content("#{@luke.name} has been approved")
+      expect(page).to have_content("#{@luke.name} has been approved on your application")
 
       visit "/admin/applications/#{@katie.id}"
-      expect(page).to have_button("Accept #{@luke.name}")
-      click_on "Accept #{@luke.name}"
-      expect(current_path).to eq("/admin/applications/#{@katie.id}")
-      expect(page).to have_content("#{@luke.name} has been approved")
+      expect(page).to have_content("#{@luke.name} has been approved on another application")
+      expect(page).to_not have_content("#{@luke.name} has been approved on your application")
     end
   end
 
@@ -95,7 +92,7 @@ RSpec.describe 'admin show page' do
   end
 
   describe 'accepting pets changes pets status in pet show page' do
-    it 'accepts pets on application, then checks pet show page is not adoptable' do 
+    it 'accepts pets on application, then checks pet show page is not adoptable' do
       visit "/admin/applications/#{@greg.id}"
       expect(current_path).to eq("/admin/applications/#{@greg.id}")
 
@@ -103,13 +100,31 @@ RSpec.describe 'admin show page' do
       click_on "Accept #{@boss.name}"
 
       visit "/pets/#{@jax.id}"
-      save_and_open_page
       expect(page).to have_content("Adoptable: false")
       expect(page).to_not have_content("Adoptable: true")
 
       visit "/pets/#{@boss.id}"
       expect(page).to have_content("Adoptable: false")
       expect(page).to_not have_content("Adoptable: true")
+    end
+  end
+
+  describe 'a pet can only have one approved application' do
+    it 'removes the ability to approve once approved elsewhere' do
+
+      visit "/admin/applications/#{@greg.id}"
+      expect(current_path).to eq("/admin/applications/#{@greg.id}")
+
+      click_on "Accept #{@luke.name}"
+
+      visit "/admin/applications/#{@katie.id}"
+      expect(current_path).to eq("/admin/applications/#{@katie.id}")
+      within '#pet_apps' do
+        save_and_open_page
+        expect(page.all('.pet')[0]).to have_content("#{@luke.name} has been approved on another application")
+        expect(page.all('.pet')[0]).to have_button("Reject #{@luke.name}")
+        expect(page.all('.pet')[0]).to_not have_button("Accept #{@luke.name}")
+      end
     end
   end
 end
