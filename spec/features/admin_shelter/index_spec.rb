@@ -18,9 +18,9 @@ RSpec.describe 'admin index' do
     visit "/admin/shelters"
 
     within ('#shelters') do
-      expect(page.all('.shelter')[0]).to have_content('Aurora shelter')
-      expect(page.all('.shelter')[1]).to have_content("Cherry Creek shelter")
-      expect(page.all('.shelter')[2]).to have_content("Denver shelter")
+      expect(page.all('.shelter')[0]).to have_content("#{@aurora.name}")
+      expect(page.all('.shelter')[1]).to have_content("#{@cherry_creek.name}")
+      expect(page.all('.shelter')[2]).to have_content("#{@denver.name}")
     end
   end
 
@@ -28,9 +28,9 @@ RSpec.describe 'admin index' do
     it 'shows each shelter with pending application' do
     visit "/admin/shelters"
       within ('#pending_apps') do
-        expect(page).to have_content("Cherry Creek shelter")
-        expect(page).to have_content("Denver shelter")
-        expect(page).to have_content("Aurora shelter")
+        expect(page).to have_content("#{@cherry_creek.name}")
+        expect(page).to have_content("#{@denver.name}")
+        expect(page).to have_content("#{@aurora.name}")
         expect(page).to have_content("Shelter's with Pending Applications")
       end
     end
@@ -38,10 +38,9 @@ RSpec.describe 'admin index' do
     it 'shows each shelter with pending application in alphabetical order' do
     visit "/admin/shelters"
       within ('#pending_apps') do
-        save_and_open_page
-        expect(page.all('.shelter')[0]).to have_content("Aurora shelter")
-        expect(page.all('.shelter')[1]).to have_content("Cherry Creek shelter")
-        expect(page.all('.shelter')[2]).to have_content("Denver shelter")
+        expect(page.all('.shelter')[0]).to have_content("#{@aurora.name}")
+        expect(page.all('.shelter')[1]).to have_content("#{@cherry_creek.name}")
+        expect(page.all('.shelter')[2]).to have_content("#{@denver.name}")
       end
     end
   end
