@@ -21,6 +21,10 @@ RSpec.describe Shelter, type: :model do
     @pet_2 = @shelter_1.pets.create(name: 'Clawdia', breed: 'shorthair', age: 3, adoptable: true)
     @pet_3 = @shelter_3.pets.create(name: 'Lucille Bald', breed: 'sphynx', age: 8, adoptable: true)
     @pet_4 = @shelter_1.pets.create(name: 'Ann', breed: 'ragdoll', age: 5, adoptable: true)
+
+    @gregory = Applicant.create(name: 'Gregory Flaherty', street_address: '123 MyStreet St.', city: "Dallas", state: "TX", zipcode: '12345', description: "Love dogs", status: "Pending")
+    PetApplicant.create(pet_id: @pet_2.id, applicant_id: @gregory.id, approved: true)
+    PetApplicant.create(pet_id: @pet_4.id, applicant_id: @gregory.id, approved: true)
   end
 
   describe 'class methods' do
@@ -71,6 +75,18 @@ RSpec.describe Shelter, type: :model do
     describe '.avg_age_available_pets' do
       it 'returns the average age of adoptable pets at given shelter' do
         expect(@shelter_1.avg_age_available_pets.round(2)).to eq(4.0)
+      end
+    end
+
+    describe '.adoptable_pet_count' do
+      it 'returns the average age of adoptable pets at given shelter' do
+        expect(@shelter_1.adoptable_pet_count).to eq(2)
+      end
+    end
+
+    describe '.adopted_pet_count' do
+      xit 'returns the average age of adoptable pets at given shelter' do
+        expect(@shelter_1.adopted_pet_count).to eq(2)
       end
     end
   end

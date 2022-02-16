@@ -10,7 +10,7 @@ class Pet < ApplicationRecord
   end
 
   def self.adoptable
-    where(adoptable: true)
+    where(adoptable: true).to_a
   end
 
   def self.search(input)

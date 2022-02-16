@@ -25,10 +25,14 @@ RSpec.describe 'admin index' do
       expect(page).to have_content("Statistics")
     end
 
-    it 'has a statistic fpr avg age of all adotpable pets' do
+    it 'has a statistic for avg age of all adotpable pets' do
       visit "/admin/shelters/#{@cherry_creek.id}"
-      save_and_open_page
       expect(page).to have_content("Average age of adoptable pets: #{@cherry_creek.avg_age_available_pets}")
+    end
+
+    it 'has a statistic for count of all adotpable pets' do
+      visit "/admin/shelters/#{@cherry_creek.id}"
+      expect(page).to have_content("Number of adoptable pets: #{@cherry_creek.adoptable_pet_count}")
     end
   end
 end
