@@ -5,7 +5,7 @@
 <div id="shelters">
   <% @shelters.each_with_index do |shelter, index| %>
     <div class="shelter">
-      <h5><%= shelter.name %></h5>
+      <h5><%= link_to "#{shelter.name}", "/admin/shelters/#{shelter.id}" %></h5>
       <p>Foster program:
         <%= shelter.foster_program %></p>
       <p>City:
