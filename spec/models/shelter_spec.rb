@@ -18,12 +18,14 @@ RSpec.describe Shelter, type: :model do
     @shelter_3 = Shelter.create(name: 'Fancy pets of Colorado', city: 'Denver, CO', foster_program: true, rank: 10)
 
     @pet_1 = @shelter_1.pets.create(name: 'Mr. Pirate', breed: 'tuxedo shorthair', age: 5, adoptable: false, status: 'Approved')
-    @pet_2 = @shelter_1.pets.create(name: 'Clawdia', breed: 'shorthair', age: 3, adoptable: true)
-    @pet_3 = @shelter_3.pets.create(name: 'Lucille Bald', breed: 'sphynx', age: 8, adoptable: true)
-    @pet_4 = @shelter_1.pets.create(name: 'Ann', breed: 'ragdoll', age: 5, adoptable: true)
+    @pet_2 = @shelter_1.pets.create(name: 'Clawdia', breed: 'shorthair', age: 3, adoptable: true, status: "Pending")
+    @pet_3 = @shelter_3.pets.create(name: 'Lucille Bald', breed: 'sphynx', age: 8, adoptable: true, status: "Pending")
+    @pet_4 = @shelter_1.pets.create(name: 'Ann', breed: 'ragdoll', age: 5, adoptable: true, status: "Pending")
 
     @gregory = Applicant.create(name: 'Gregory Flaherty', street_address: '123 MyStreet St.', city: "Dallas", state: "TX", zipcode: '12345', description: "Love dogs", status: "Pending")
     PetApplicant.create(pet_id: @pet_1.id, applicant_id: @gregory.id, approved: true)
+    PetApplicant.create(pet_id: @pet_2.id, applicant_id: @gregory.id, approved: false)
+    PetApplicant.create(pet_id: @pet_4.id, applicant_id: @gregory.id, approved: false)
   end
 
   describe 'class methods' do
@@ -86,6 +88,12 @@ RSpec.describe Shelter, type: :model do
     describe '.adopted_pet_count' do
       it 'returns the average age of adoptable pets at given shelter' do
         expect(@shelter_1.adopted_pet_count).to eq(1)
+      end
+    end
+
+    describe '.pending_apps' do
+      it 'all applications that have not been approved at given shelter' do
+        expect(@shelter_1.pending_apps).to eq([@pet_2, @pet_4])
       end
     end
   end

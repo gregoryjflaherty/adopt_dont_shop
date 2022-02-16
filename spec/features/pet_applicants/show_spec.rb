@@ -34,8 +34,8 @@ RSpec.describe 'add pet to application' do
 
     expect(current_path).to eq("/applicants/#{@greg.id}")
     expect(page).to have_content("Pets on application: ")
-    expect(page).to have_content("Jax")
-    expect(page).to_not have_content("Lady")
+    expect(page).to have_content("#{@jax.name}")
+    expect(page).to_not have_content("#{@lady.name}")
   end
 
 
