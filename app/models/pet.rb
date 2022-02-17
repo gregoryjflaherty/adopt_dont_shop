@@ -16,4 +16,6 @@ class Pet < ApplicationRecord
   def self.search(input)
     where(["name LIKE ?", "%#{input.downcase.titleize}%"])
   end
+
+  
 end
