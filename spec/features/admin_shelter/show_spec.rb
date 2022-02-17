@@ -50,4 +50,33 @@ RSpec.describe 'admin show' do
       expect(page).to have_content("Number of adopted pets: #{@cherry_creek.adopted_pet_count}")
     end
   end
+
+  describe 'shows all pending applications for given shelter' do
+
+    it 'has action required section- with all pending' do
+      visit "/admin/shelters/#{@cherry_creek.id}"
+
+      expect(page).to have_content("Action Required")
+    end
+
+    it 'shows pending applications' do
+      visit "/admin/shelters/#{@cherry_creek.id}"
+
+      expect(page).to have_link("#{@boss.name}")
+      expect(page).to have_link("#{@ducky.name}")
+    end
+
+    it 'link takes you to application show page' do
+      visit "/admin/shelters/#{@cherry_creek.id}"
+
+      expect(page).to have_link("#{@boss.name}")
+      click_on "#{@boss.name}"
+      expect(current_path).to eq("/admin/applications/#{@greg.id}")
+
+      visit "/admin/shelters/#{@cherry_creek.id}"
+      expect(page).to have_link("#{@ducky.name}")
+      click_on "#{@ducky.name}"
+      expect(current_path).to eq("/admin/applications/#{@laura.id}")
+    end
+  end
 end

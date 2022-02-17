@@ -5,3 +5,9 @@
 <li><%= "Average age of adoptable pets: #{@shelter.avg_age_available_pets}" %><li>
 <li><%= "Number of adoptable pets: #{@shelter.adoptable_pet_count}" %><li>
 <li><%= "Number of adopted pets: #{@shelter.adopted_pet_count}" %><li>
+
+<h4> Action Required </h4>
+<% @shelter.pending_apps.each do |pet| %>
+  <%# <% binding.pry %> %>
+  <%= link_to "#{pet.name}", "/admin/applications/#{pet.applicants.first.id}" %>
+<% end %>

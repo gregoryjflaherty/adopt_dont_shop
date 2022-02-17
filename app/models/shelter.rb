@@ -57,6 +57,6 @@ class Shelter < ApplicationRecord
   end
 
   def pending_apps
-    pets.where("status = ?", "Pending").to_a
+    pets.where("status = ?", "Pending")
   end
 end

@@ -15,7 +15,7 @@ RSpec.describe 'admin index' do
   end
 
   it 'lists all shelters alphabetically- in reverse' do
-    visit "/admin/shelters"
+    visit admin_shelters_path
 
     within ('#shelters') do
       expect(page.all('.shelter')[0]).to have_content("#{@denver.name}")
